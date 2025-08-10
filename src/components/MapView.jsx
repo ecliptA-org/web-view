@@ -1,4 +1,5 @@
-import React from 'react';
+import { useEffect } from 'react';
+import { useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 
@@ -6,6 +7,16 @@ import MazePopup from './MazePopup';
 import AdjustPopup from './AdjustPopup'; // 별도 팝업 컴포넌트
 
 import pinIcon from '../assets/icons/pin.svg';
+
+function CenterUpdater({ center }) {
+  const map = useMap();
+  useEffect(() => {
+    if (center) {
+      map.setView(center); // center가 바뀌면 지도도 이동
+    }
+  }, [center, map]);
+  return null;
+}
 
 // Leaflet 기본 아이콘 설정
 delete L.Icon.Default.prototype._getIconUrl;
@@ -57,6 +68,7 @@ export default function MapView({
   return (
     <>
       <MapContainer center={center} zoom={16} style={{ height: '100vh' }}>
+        <CenterUpdater center={center} />
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <MapEvents onMapMove={onMapMove} />
 

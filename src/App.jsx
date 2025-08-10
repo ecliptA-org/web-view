@@ -3,21 +3,42 @@ import MapView from './components/MapView';
 import ScanButton from './components/ScanButton';
 import StoreButton from './components/StoreButton';
 
+const DEFAULT_CENTER = [37.5665, 126.9780]; // 서울
+
 export default function App() {
   const [mazes, setMazes] = useState({});
-  const [center, setCenter] = useState([37.5665, 126.9780]); // 초기 중심 좌표 (서울)
-  const [currentMarkerPos, setCurrentMarkerPos] = useState(center); // currentAddMarker 위치
+  const [center, setCenter] = useState(DEFAULT_CENTER); // 초기 중심 좌표 (서울)
+  const [currentMarkerPos, setCurrentMarkerPos] = useState(DEFAULT_CENTER); // currentAddMarker 위치
   const [showPopup, setShowPopup] = useState(false); // 팝업 표시 상태
+
+    // Unity에서 위치 업데이트 메시지를 수신하여 마커 위치를 업데이트
+  useEffect(() => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const userPos = [pos.coords.latitude, pos.coords.longitude];
+          setCenter(userPos);
+          setCurrentMarkerPos(userPos);
+        },
+        (err) => {
+          // 위치 권한 거부시 center(서울) 유지
+          setCenter(DEFAULT_CENTER);
+          setCurrentMarkerPos(DEFAULT_CENTER);
+        }
+      );
+    } else {
+      setCenter(DEFAULT_CENTER);
+      setCurrentMarkerPos(DEFAULT_CENTER);
+    }
+  }, []);
 
   // Unity 메시지 수신 핸들러
   useEffect(() => {
-    setCurrentMarkerPos(center);
-    // 기존 Unity 메시지 핸들러(옵션)
     window.updateMapToLocation = (lat, lng) => {
       setCenter([lat, lng]);
       setCurrentMarkerPos([lat, lng]);
     };
-  }, [center]);
+  }, []);
 
   // 스캔 버튼 클릭 핸들러
   const handleScanButton = () => {
