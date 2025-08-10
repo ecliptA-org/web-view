@@ -1,0 +1,18 @@
+/* 전역 스타일 */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Freesentation-6SemiBold', sans-serif;
+  font-size: 20px;
+}
+.leaflet-container {
+  z-index: 0 !important;
+}
+
+@font-face {
+    font-family: 'Freesentation-6SemiBold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-6SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+}
