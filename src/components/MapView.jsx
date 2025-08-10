@@ -28,36 +28,30 @@ function MapEvents({ onMapMove }) {
     moveend: (event) => {
       const map = event.target;
       const bounds = map.getBounds();
-      
+
       // 현재 화면에 보이는 영역의 경계 좌표
       const ne = bounds.getNorthEast(); // 북동쪽 모서리
       const sw = bounds.getSouthWest(); // 남서쪽 모서리
-      
+
       // API 호출을 위한 데이터
-      const mapBounds = {
-        ne_lat: ne.lat,
-        ne_lng: ne.lng,
-        sw_lat: sw.lat,
-        sw_lng: sw.lng
-      };
-      
-      // 부모 컴포넌트로 지도 이동 알림
-      onMapMove(mapBounds);
+      onMapMove({
+        ne_lat: ne.lat, ne_lng: ne.lng,
+        sw_lat: sw.lat, sw_lng: sw.lng
+      });
     },
   });
   return null;
 }
 
-export default function MapView({ 
-  mazes, 
-  adding, 
-  center, 
-  currentMarkerPos, 
-  showPopup, 
-  onConfirm, 
-  onCancel, 
-  onMarkerDrag, 
-  onMapMove  
+export default function MapView({
+  mazes,
+  center,
+  currentMarkerPos,
+  showPopup,
+  onConfirm,
+  onCancel,
+  onMarkerDrag,
+  onMapMove
 }) {
 
   return (
@@ -65,7 +59,7 @@ export default function MapView({
       <MapContainer center={center} zoom={16} style={{ height: '100vh' }}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <MapEvents onMapMove={onMapMove} />
-        
+
         {/* 기존 미로 마커들 */}
         {Object.entries(mazes).map(([key, list]) => {
           const [lat, lng] = key.split(',').map(Number);
@@ -75,28 +69,30 @@ export default function MapView({
             </Marker>
           );
         })}
-        
+
         {/* 새 미로 위치 마커 */}
         {adding && currentMarkerPos && (
-          <Marker 
-            position={currentMarkerPos} 
-            draggable 
+          <Marker
+            position={currentMarkerPos}
+            draggable
             eventHandlers={{
               dragend: (e) => {
                 const { lat, lng } = e.target.getLatLng();
                 onMarkerDrag([lat, lng]);
               }
-            }} 
+            }}
           />
         )}
       </MapContainer>
-      
+
       {/* 조정 팝업 */}
       {showPopup && currentMarkerPos && (
-        <AdjustPopup 
+        <AdjustPopup
           position={currentMarkerPos}
           onConfirm={onConfirm}
           onCancel={onCancel}
+          lat={lat}
+          lng={lng}
         />
       )}
     </>
