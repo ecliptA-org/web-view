@@ -71,7 +71,7 @@ export default function MapView({
         })}
 
         {/* 새 미로 위치 마커 */}
-        {adding && currentMarkerPos && (
+        {currentMarkerPos && (
           <Marker
             position={currentMarkerPos}
             draggable
@@ -89,10 +89,10 @@ export default function MapView({
       {showPopup && currentMarkerPos && (
         <AdjustPopup
           position={currentMarkerPos}
+          lat={currentMarkerPos[0]}
+          lng={currentMarkerPos[1]}
           onConfirm={onConfirm}
           onCancel={onCancel}
-          lat={lat}
-          lng={lng}
         />
       )}
     </>
