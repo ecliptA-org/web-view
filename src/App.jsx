@@ -4,32 +4,27 @@ import ScanButton from './components/ScanButton';
 import StoreButton from './components/StoreButton';
 
 export default function App() {
-  const [mazes, setMazes] = useState({});   // { "lat,lng": [{ id, title }] }
-  const [adding, setAdding] = useState(false);
-  const [center, setCenter] = useState([37.5665, 126.9780]);
-  const [uiMode, setUiMode] = useState("idle"); // uiMode 상태
-  const [currentMarkerPos, setCurrentMarkerPos] = useState(null); // currentAddMarker 위치
+  const [mazes, setMazes] = useState({});
+  const [center, setCenter] = useState([37.5665, 126.9780]); // 초기 중심 좌표 (서울)
+  const [currentMarkerPos, setCurrentMarkerPos] = useState(center); // currentAddMarker 위치
   const [showPopup, setShowPopup] = useState(false); // 팝업 표시 상태
 
   // Unity 메시지 수신 핸들러
   useEffect(() => {
+    setCurrentMarkerPos(center);
+    // 기존 Unity 메시지 핸들러(옵션)
     window.updateMapToLocation = (lat, lng) => {
       setCenter([lat, lng]);
-      setCurrentMarkerPos([lat, lng]); // 마커 위치 설정
-
-      // uiMode가 "adding"일 때만 팝업 표시
-      if (uiMode === "adding") {
-        setShowPopup(true);
-      }
+      setCurrentMarkerPos([lat, lng]);
     };
-  }, [uiMode]);
+  }, [center]);
 
-  // 방탈출 추가 모드 활성화 핸들러
-  const handleAddMaze = () => {
-    if (window.Unity) {
-      setUiMode("adding");
-      setAdding(true);
-      window.Unity.call(JSON.stringify({ type: 'request_location' }));
+  // 스캔 버튼 클릭 핸들러
+  const handleScanButton = () => {
+    if (currentMarkerPos) {
+      setShowPopup(true);
+    } else {
+      alert('공간을 생성할 위치로 마커를 옮겨주세요.');
     }
   };
 
@@ -67,19 +62,14 @@ export default function App() {
     }
 
     // 상태 초기화
-    setCurrentMarkerPos(null);
     setShowPopup(false);
-    setAdding(false);
-    setUiMode("idle");
+    setCurrentMarkerPos(null);
     alert("방탈출이 추가되었습니다");
   };
 
   // 방탈출 추가 취소 핸들러
   const handleCancel = () => {
     setShowPopup(false);
-    setCurrentMarkerPos(null);
-    setAdding(false);
-    setUiMode("idle");
   };
 
   // 마커 드래그 시 위치 업데이트
@@ -103,12 +93,11 @@ export default function App() {
         position: 'fixed', bottom: 24, left: '50%',
         transform: 'translateX(-50%)', zIndex: 9999
       }}>
-        <ScanButton />
+        <ScanButton onAdd={handleScanButton} />
       </div>
       <div style={{ zIndex: 0 }}>
         <MapView
           mazes={mazes}
-          adding={adding}
           center={center}
           currentMarkerPos={currentMarkerPos}
           showPopup={showPopup}

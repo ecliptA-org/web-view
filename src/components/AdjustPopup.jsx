@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import html2canvas from 'html2canvas';
 import styles from '../style/AdjustPopup.module.css';
 
-export default function AdjustPopup({ onConfirm, onCancel }) {
+export default function AdjustPopup({ onConfirm, onCancel, lat, lng }) {
   const [snapshotUrl, setSnapshotUrl] = useState(null);
 
   useEffect(() => {
