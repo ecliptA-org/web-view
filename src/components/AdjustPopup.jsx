@@ -12,6 +12,8 @@ export default function AdjustPopup({ onConfirm, onCancel, lat, lng }) {
 
     // html2canvas로 스냡샷 생성
     html2canvas(mapContainer, {
+      useCORS: true,
+      allowTaint: true,
       width: 297,
       height: 147,
       scale: window.devicePixelRatio, // 고해상도 지원

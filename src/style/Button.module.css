@@ -17,24 +17,42 @@
   box-shadow: 0 0 24px rgba(0, 0, 24, 0.28);
   background: #000000;
 }
-
-.confirmBtn,
-.cancleBtn {
-    width: 297px;
-    height: 45px;
-    border-radius: 25px;
-    margin: 7px;
-    border: none;
+/* 가로선: 기본 가운데 */
+.scanLineCenter {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 50%;
+  height: 5px;
+  background: linear-gradient(90deg,#ffffff,#c7faf2);
+  border-radius: 2.5px;
+  transform: translateY(-50%);
+  transition: top 0.2s;
+  z-index: 0;
 }
 
-.confirmBtn {
-    background-color: rgba(86, 201, 192, 1);
-    color: rgba(250, 250, 250, 1);
+/* 스캔 애니메이션: 위→아래→가운데 복귀 */
+.scanLineMove {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  height: 5px;
+  background: linear-gradient(90deg,#56c9c0,#c7faf2);
+  border-radius: 2.5px;
+  animation: scanMove 1.2s cubic-bezier(.83,.13,.6,1) forwards;
+  z-index: 0;
 }
 
-.cancleBtn {
-    background-color: rgba(250, 250, 250, 1);
-    color: rgba(86, 201, 192, 1);
+@keyframes scanMove {
+  0%   { top: 50%; transform: translateY(-50%);}
+  20%  { top: 10%; transform: translateY(0); }
+  50%  { top: 80%; transform: translateY(0);}
+  100% { top: 50%; transform: translateY(-50%);}
+}
+
+/* 버튼 클릭 효과 */
+.ScanButton:active {
+  box-shadow: 0 2px 10px rgba(86,201,192,0.16);
 }
 
 /* 상점 버튼 */

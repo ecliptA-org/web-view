@@ -1,0 +1,35 @@
+.mazePopup {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  flex-direction: column;
+  gap: 12px;
+  
+}
+
+/* 타이틀/메모 */
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mazeTitle {
+  font-size: 21px;
+  font-weight: 600;
+  color: #222;
+}
+
+.mazeMemo {
+  font-size: 12px;
+  color: #777;
+}
+
+.popupRoomItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  flex-direction: column;
+}

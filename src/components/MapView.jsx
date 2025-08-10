@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useMap } from 'react-leaflet';
+import { useMap, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 
@@ -29,7 +29,7 @@ L.Icon.Default.mergeOptions({
 // 마커 아이콘 
 const customIcon = new L.Icon({
   iconUrl: pinIcon,
-  iconSize: [32, 32], // pin 크기 
+  iconSize: [64, 64], // pin 크기 
   iconAnchor: [16, 32], // 핀의 끝점을 마커 위치에 맞춤
   popupAnchor: [0, -32], // 팝업이 핀 위에 표시되도록
 });
@@ -77,7 +77,9 @@ export default function MapView({
           const [lat, lng] = key.split(',').map(Number);
           return (
             <Marker key={key} position={[lat, lng]} icon={customIcon}>
-              <MazePopup list={list} />
+              <Popup>
+                <MazePopup list={list} />
+              </Popup>
             </Marker>
           );
         })}
