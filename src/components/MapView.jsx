@@ -89,10 +89,10 @@ export default function MapView({
       {showPopup && currentMarkerPos && (
         <AdjustPopup
           position={currentMarkerPos}
-          lat={currentMarkerPos[0]}
-          lng={currentMarkerPos[1]}
           onConfirm={onConfirm}
           onCancel={onCancel}
+          lat={currentMarkerPos[0]}
+          lng={currentMarkerPos[1]}
         />
       )}
     </>

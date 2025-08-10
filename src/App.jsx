@@ -22,6 +22,7 @@ export default function App() {
   // 스캔 버튼 클릭 핸들러
   const handleScanButton = () => {
     if (currentMarkerPos) {
+      console.log("스캔 버튼 클릭됨");
       setShowPopup(true);
     } else {
       alert('공간을 생성할 위치로 마커를 옮겨주세요.');
@@ -31,7 +32,7 @@ export default function App() {
   // 방탈출 추가 확인 핸들러
   const handleConfirm = () => {
     if (!currentMarkerPos) {
-      alert("마커 위치 오류: 다시 시도하세요");
+      alert("마커 위치 오류");
       return;
     }
 
@@ -63,7 +64,7 @@ export default function App() {
 
     // 상태 초기화
     setShowPopup(false);
-    setCurrentMarkerPos(null);
+    setCurrentMarkerPos(center);
     alert("방탈출이 추가되었습니다");
   };
 
