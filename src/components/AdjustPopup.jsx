@@ -36,12 +36,10 @@ export default function AdjustPopup({ onConfirm, onCancel, lat, lng }) {
       ) : (
         <p>지도를 불러오는 중...</p>
       )}
-      <button className={styles.confirmBtn} onClick={onConfirm}>
-        <p>네, 계속 진행할래요</p>
-      </button>
-      <button className={styles.cancelBtn} onClick={onCancel}>
-        <p>아니오, 다시 고를래요</p>
-      </button>
+      <div className={styles.adjustPopup_buttons}>
+        <button className={styles.confirmBtn} onClick={onConfirm}>네</button>
+        <button className={styles.cancelBtn} onClick={onCancel}>아니오</button>
+      </div>
     </div>
   );
 }
