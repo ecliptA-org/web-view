@@ -32,7 +32,7 @@
 
 /* 지도 스냅샷 이미지 */
 .staticMapImage {
-    width: 297px;
+    width: 100%;
     height: 147px;
     object-fit: cover;
     border-radius: 12px;
