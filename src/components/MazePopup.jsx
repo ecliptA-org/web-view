@@ -103,7 +103,7 @@ export default function MazePopup({ space }) {
             <MazePlayerCard
               key={player.user_id}
               rank={player.current_rank}
-              name={player.nickname || `플레이어#${player.user_id}`}
+              name={player.nickname || `탈출자 ${player.user_id}`}
               time={player.clear_time ? formatTime(player.clear_time) : '-'}
               badgeIconSrc="Polygon 2.svg"
               avatarSrc={profileImages[player.user_id]}
