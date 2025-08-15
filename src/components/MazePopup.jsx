@@ -112,7 +112,7 @@ export default function MazePopup({ space }) {
         }
       </div> 
 
-      <MazePlayButton />
+      <MazePlayButton spaceId={space.user_space_id} />
     </div>
   );
 }
