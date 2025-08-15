@@ -4,7 +4,7 @@ import styles from '../../style/MazeInfo.module.css';
 export default function MazePlayButton({ spaceId, label = "플레이" }) {
   const goToSpace = (scene, userSpaceId) => {
     window.Unity?.call(JSON.stringify({
-      type: 'scene_change',
+      type: 'go_to_space',
       target: scene,
       user_space_id: userSpaceId
     }));

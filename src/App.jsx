@@ -13,7 +13,7 @@ export default function App() {
 
   const goToSpace = (scene, spaceId) => {
     window.Unity?.call(JSON.stringify({
-      type: 'scene_change',
+      type: 'go_to_space',
       target: scene,
       user_space_id: spaceId
     }));
