@@ -21,8 +21,7 @@ export default function App() {
   };
 
   // Unity에서 토큰을 수신하여 로컬 스토리지에 저장
-  useEffect(() => {
-  // Unity에서 호출하는 함수 등록
+  useEffect(() => { 
   window.receiveTokenFromUnity = function (tokenObj) {
     console.log('[React] Unity에서 받은 토큰:', tokenObj);
 
@@ -149,7 +148,7 @@ export default function App() {
       alert("방탈출이 추가되었습니다");
 
       // 씬 이동 
-      goToSpace('SpaceScan', spaceId);
+      goToSpace('SpaceScene', spaceId);
     } catch (err) {
       alert('서버 오류, 다시 시도해 주세요.');
     }
