@@ -103,3 +103,19 @@
   color: #fafafa;
   font-family: 'Freesentation', sans-serif;
 }
+
+.MyPageButton {
+  width: 43px;
+  height: 43px;
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 25px;
+  background: transparent;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.28);
+}
