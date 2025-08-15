@@ -1,25 +1,24 @@
 import React from 'react';
-import styles from '../../style/MazeInfo.module.css'; 
+import styles from '../../style/MazeInfo.module.css';
 
 export default function MazePlayerCard({
-  rank,     
-  name,        
+  rank,
+  name,
   time, // 클리어 시간
   avatarSrc, // 프로필 이미지 URL 
-  trend, // 랭킹 변화  
-  highlight=false
+  trend, // 랭킹 변화 
 }) {
   // 랭킹 변화 화살표 렌더링
   let trendArrow = null;
-  if(trend === 'up') {
-    trendArrow = <img 
-      src="../../../assets/up.svg" 
-      alt="상승" 
+  if (trend === 'up') {
+    trendArrow = <img
+      src="../../../assets/up.svg"
+      alt="상승"
       className={styles.trendArrow} />;
-  } else if(trend === 'down') {
-    trendArrow = <img 
-      src="../../../assets/down.svg" 
-      alt="하락" 
+  } else if (trend === 'down') {
+    trendArrow = <img
+      src="../../../assets/down.svg"
+      alt="하락"
       className={styles.trendArrow} />;
   }
 
@@ -28,16 +27,28 @@ export default function MazePlayerCard({
       {/* 등수 */}
       <div className={styles.rank}>{rank}</div>
       {/* 프로필 이미지 */}
-      <div
+      {/* <div
         className={styles.avatar}
         style={{ backgroundImage: `url(${avatarSrc})` }}
+      /> */}
+      <img
+        className={styles.avatar}
+        src={avatarSrc}
+        alt={`${name} 프로필`}
+        onError={(e) => {
+          <div
+            className={styles.avatar}
+            style={{ backgroundImage: `url(${avatarSrc})` }}
+          />
+        }}
+      // style={{ width: '40px', height: '40px', borderRadius: '50%' }}
       />
       {/* 사용자 정보 및 기록 */}
       <div className={styles.infoCol}>
         <div className={styles.player}>{name}</div>
         <div className={styles.time}>{time}</div>
-      </div> 
-      
+      </div>
+
       {trendArrow}
     </div>
   );

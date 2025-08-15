@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useMap, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
@@ -64,7 +64,31 @@ export default function MapView({
   onMarkerDrag,
   onMapMove
 }) {
+  const [selectedSpaceId, setSelectedSpaceId] = useState(null);
+  const [selectedSpaceInfo, setSelectedSpaceInfo] = useState(null);
 
+  const handleMarkerClick = async (space_id) => {
+    try {
+      const token = localStorage.getItem('jwtToken');
+      const res = await fetch(`http://13.62.89.17/api/user-space/${space_id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!res.ok) {
+        const errMsg = await res.text();
+        alert('권한 오류: ' + errMsg);
+        return;
+      }
+      const data = await res.json();
+      setSelectedSpaceInfo(data);
+      setSelectedSpaceId(space_id);
+    } catch (err) {
+      alert('방 상세 정보를 불러오지 못했습니다.');
+    }
+  };
+mapbox://styles/jo-hyroim/cmec2ns7t008o01r9dajt9ft6
   return (
     <>
       <MapContainer center={center} zoom={16} style={{ height: '100vh' }}>
@@ -73,15 +97,29 @@ export default function MapView({
         <MapEvents onMapMove={onMapMove} />
 
         {/* 기존 미로 마커들 */}
-        {Object.entries(mazes).map(([key, list]) => {
-          const [lat, lng] = key.split(',').map(Number);
-          return (
-            <Marker key={key} position={[lat, lng]} icon={customIcon}>
-              <Popup>
-                <MazePopup list={list} />
-              </Popup>
-            </Marker>
-          );
+        {mazes.map(space => {
+          const { space_id, latitude, longitude } = space;
+
+          // 좌표값이 정상일 때만 마커 렌더링
+          if (!isNaN(latitude) && !isNaN(longitude)) {
+            return (
+              <Marker
+                key={space_id}
+                position={[latitude, longitude]}
+                icon={customIcon}
+                eventHandlers={{
+                  click: () => handleMarkerClick(space.space_id)
+                }}
+              >
+                {selectedSpaceId === space_id && selectedSpaceInfo && (
+                  <Popup>
+                    <MazePopup space={selectedSpaceInfo} />
+                  </Popup>
+                )}
+              </Marker>
+            );
+          }
+          return null;
         })}
 
         {/* 새 미로 위치 마커 */}
@@ -99,7 +137,7 @@ export default function MapView({
         )}
       </MapContainer>
 
-      {/* 조정 팝업 */}
+      {/* 공간 탈출 추가 팝업 */}
       {showPopup && currentMarkerPos && (
         <AdjustPopup
           position={currentMarkerPos}
