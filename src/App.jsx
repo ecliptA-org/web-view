@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import MapView from './components/MapView';
 import ScanButton from './components/ScanButton';
 import StoreButton from './components/StoreButton';
+import MyPageButton from './components/MyPageButton';
 
 const DEFAULT_CENTER = [37.5665, 126.9780]; // 서울
 
@@ -160,6 +161,9 @@ export default function App() {
     <>
       <div style={{ position: 'fixed', top: 24, right: 24, zIndex: 9999 }}>
         <StoreButton />
+      </div>
+      <div style={{ position: 'fixed', top: 24, left: 24, zIndex: 9999 }}>
+        <MyPageButton />
       </div>
       <div style={{
         position: 'fixed', bottom: 24, left: '50%',
