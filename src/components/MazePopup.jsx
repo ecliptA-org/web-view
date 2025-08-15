@@ -20,7 +20,7 @@ export default function MazePopup({ space }) {
 
     const fetchScore = async () => {
       try {
-        const res = await fetch(`http://13.62.89.17/api/user-space/${space.user_space_id}/score`, {
+        const res = await fetch(`https://hyorim.shop/api/user-space/${space.user_space_id}/score`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -43,7 +43,7 @@ export default function MazePopup({ space }) {
     setLoading(true); 
 
     const fetchRanking = async () => {
-      const res = await fetch(`http://13.62.89.17/api/user-space/${space.user_space_id}/ranking`);
+      const res = await fetch(`https://hyorim.shop/api/user-space/${space.user_space_id}/ranking`);
 
       const data = await res.json();
       setRanking(data.ranking || []);
@@ -60,7 +60,7 @@ export default function MazePopup({ space }) {
     setImageLoadingStates(prev => ({ ...prev, [userId]: true }));
  
     try {
-      const res = await fetch(`http://13.62.89.17/api/profile?userId=${userId}`);
+      const res = await fetch(`https://hyorim.shop/api/profile?userId=${userId}`);
 
       if (!res.ok) throw new Error('프로필 이미지 요청 실패');
 

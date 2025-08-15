@@ -70,7 +70,7 @@ export default function MapView({
   const handleMarkerClick = async (space_id) => {
     try {
       const token = localStorage.getItem('jwtToken');
-      const res = await fetch(`http://13.62.89.17/api/user-space/${space_id}`, {
+      const res = await fetch(`https://hyorim.shop/api/user-space/${space_id}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
