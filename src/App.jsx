@@ -25,6 +25,7 @@ export default function App() {
     window.receiveTokenFromUnity = function (tokenObj) { 
       console.log('Unity에서 받은 토큰:', tokenObj);
 
+      alert('Unity에서 받은 토큰:', tokenObj);
       if (typeof tokenObj === 'string') {
         try {
           tokenObj = JSON.parse(tokenObj);
@@ -39,6 +40,7 @@ export default function App() {
       // 디버깅용
       console.log('access_token 저장:', tokenObj.access_token);
       console.log('refresh_token 저장:', tokenObj.refresh_token);
+      alert('access_token 저장:', tokenObj.access_token);
     };
   }, []);
 
