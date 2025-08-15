@@ -22,6 +22,8 @@ export default function App() {
   // Unity에서 토큰을 수신하여 로컬 스토리지에 저장
   useEffect(() => {
     window.receiveTokenFromUnity = function (tokenObj) { 
+      console.log('Unity에서 받은 토큰:', tokenObj);
+      
       if (typeof tokenObj === 'string') {
         try {
           tokenObj = JSON.parse(tokenObj);
@@ -38,7 +40,6 @@ export default function App() {
       console.log('refresh_token 저장:', tokenObj.refresh_token);
     };
   }, []);
-
 
   // Unity에서 위치 업데이트 메시지를 수신하여 마커 위치를 업데이트
   useEffect(() => {
