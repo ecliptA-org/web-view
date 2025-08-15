@@ -24,3 +24,4 @@ yarn-error.log*
 
 # 유니티 메타 파일
 *.meta
+.env
