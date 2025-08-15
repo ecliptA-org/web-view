@@ -95,7 +95,7 @@ export default function App() {
 
     // 공간 저장 api 연동
     try {
-      const res = await fetch('http://13.62.89.17/api/user-space', {
+      const res = await fetch('https://hyorim.shop/api/user-space', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -149,7 +149,7 @@ export default function App() {
     if (!ne_lat || !ne_lng || !sw_lat || !sw_lng) return;
     console.log('지도 요청 경계값:', ne_lat, ne_lng, sw_lat, sw_lng);
 
-    const response = await fetch(`http://13.62.89.17/api/map?ne_lat=${bounds.ne_lat}&ne_lng=${bounds.ne_lng}&sw_lat=${bounds.sw_lat}&sw_lng=${bounds.sw_lng}&status=active`);
+    const response = await fetch(`https://hyorim.shop/api/map?ne_lat=${bounds.ne_lat}&ne_lng=${bounds.ne_lng}&sw_lat=${bounds.sw_lat}&sw_lng=${bounds.sw_lng}&status=active`);
     const nearbyMazes = await response.json();
     console.log('조회된 공간 탈출:', nearbyMazes.spaces);
     setMazes(nearbyMazes.spaces ?? []); // 현재 영역의 마커만 업데이트 
