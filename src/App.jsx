@@ -6,12 +6,31 @@ import StoreButton from './components/StoreButton';
 const DEFAULT_CENTER = [37.5665, 126.9780]; // 서울
 
 export default function App() {
-  const [mazes, setMazes] = useState({});
+  const [mazes, setMazes] = useState([]);
   const [center, setCenter] = useState(DEFAULT_CENTER); // 초기 중심 좌표 (서울)
   const [currentMarkerPos, setCurrentMarkerPos] = useState(DEFAULT_CENTER); // currentAddMarker 위치
   const [showPopup, setShowPopup] = useState(false); // 팝업 표시 상태
 
-    // Unity에서 위치 업데이트 메시지를 수신하여 마커 위치를 업데이트
+  const changeScene = (scene) => {
+    window.Unity?.call(JSON.stringify({ type: 'scene_change', target: scene }));
+  };
+
+  // Unity에서 토큰을 수신하여 로컬 스토리지에 저장
+  useEffect(() => {
+    window.receiveTokenFromUnity = function (token) {
+      localStorage.setItem('jwtToken', token);
+    };
+    // 개발용 임시 토큰 저장
+    if (process.env.NODE_ENV === 'test_token') {
+      window.receiveTokenFromUnity();
+    }
+    return () => {
+      window.receiveTokenFromUnity = null;
+    };
+  }, []);
+
+
+  // Unity에서 위치 업데이트 메시지를 수신하여 마커 위치를 업데이트
   useEffect(() => {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -51,7 +70,7 @@ export default function App() {
   };
 
   // 방탈출 추가 확인 핸들러
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!currentMarkerPos) {
       alert("마커 위치 오류");
       return;
@@ -59,34 +78,45 @@ export default function App() {
 
     const title = prompt('방탈출 이름 입력:', '새 방탈출');
     if (!title) return;
+    const memo = prompt('메모 입력(선택)', '');
 
-    const id = "maze" + Date.now();
     const lat = currentMarkerPos[0].toFixed(4);
     const lng = currentMarkerPos[1].toFixed(4);
-    const key = `${lat},${lng}`;
 
-    // 미로 데이터 추가
-    setMazes(prev => ({
-      ...prev,
-      [key]: [...(prev[key] || []), { id, title }]
-    }));
+    // 공간 저장 api 연동
+    try {
+      const res = await fetch('http://13.62.89.17/api/user-space', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+        },
+        body: JSON.stringify({
+          location: {
+            latitude: Number(lat),
+            longitude: Number(lng)
+          },
+          space_name: title,
+          memo: memo
+        })
+      });
 
-    // Unity로 메시지 전송
-    if (window.Unity) {
-      const message = {
-        type: "maze_added",
-        id,
-        title,
-        lat: parseFloat(lat),
-        lng: parseFloat(lng)
-      };
-      window.Unity.call(JSON.stringify(message));
+      if (!res.ok) {
+        const err = await res.text();
+        alert('저장 실패: ' + err);
+        return;
+      }
+
+      // 상태 초기화
+      setShowPopup(false);
+      setCurrentMarkerPos(center);
+      alert("방탈출이 추가되었습니다");
+
+      // 씬 이동 
+      changeScene('SpaceScan');
+    } catch (err) {
+      alert('서버 오류, 다시 시도해 주세요.');
     }
-
-    // 상태 초기화
-    setShowPopup(false);
-    setCurrentMarkerPos(center);
-    alert("방탈출이 추가되었습니다");
   };
 
   // 방탈출 추가 취소 핸들러
@@ -101,9 +131,14 @@ export default function App() {
 
   // 지도 이동 마커 핸들러
   const handleMapMove = async (bounds) => {
-    const response = await fetch(`/api/map?ne_lat=${bounds.ne_lat}&ne_lng=${bounds.ne_lng}&sw_lat=${bounds.sw_lat}&sw_lng=${bounds.sw_lng}&status=active`);
+    const { ne_lat, ne_lng, sw_lat, sw_lng } = bounds;
+    if (!ne_lat || !ne_lng || !sw_lat || !sw_lng) return;
+    console.log('지도 요청 경계값:', ne_lat, ne_lng, sw_lat, sw_lng);
+
+    const response = await fetch(`http://13.62.89.17/api/map?ne_lat=${bounds.ne_lat}&ne_lng=${bounds.ne_lng}&sw_lat=${bounds.sw_lat}&sw_lng=${bounds.sw_lng}&status=active`);
     const nearbyMazes = await response.json();
-    setMazes(nearbyMazes); // 현재 영역의 마커만 업데이트 
+    console.log('조회된 공간 탈출:', nearbyMazes.spaces);
+    setMazes(nearbyMazes.spaces ?? []); // 현재 영역의 마커만 업데이트 
   };
 
   return (
