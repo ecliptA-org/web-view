@@ -15,21 +15,27 @@ export default function App() {
     window.Unity?.call(JSON.stringify({
       type: 'go_to_space',
       target: scene,
-      user_space_id: spaceId
+      user_space_idd: spaceId
     }));
   };
 
   // Unity에서 토큰을 수신하여 로컬 스토리지에 저장
   useEffect(() => {
-    window.receiveTokenFromUnity = function (token) {
-      localStorage.setItem('jwtToken', token);
-    };
-    // 개발용 임시 토큰 저장
-    if (process.env.NODE_ENV === 'test_token') {
-      window.receiveTokenFromUnity();
-    }
-    return () => {
-      window.receiveTokenFromUnity = null;
+    window.receiveTokenFromUnity = function (tokenObj) { 
+      if (typeof tokenObj === 'string') {
+        try {
+          tokenObj = JSON.parse(tokenObj);
+        } catch {
+          console.error('토큰 파싱 오류:', tokenObj);
+          return;
+        }
+      }
+      if (tokenObj.access_token) localStorage.setItem('jwtToken', tokenObj.access_token);
+      if (tokenObj.refresh_token) localStorage.setItem('jwtRefreshToken', tokenObj.refresh_token);
+
+      // 디버깅용
+      console.log('access_token 저장:', tokenObj.access_token);
+      console.log('refresh_token 저장:', tokenObj.refresh_token);
     };
   }, []);
 
