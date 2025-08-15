@@ -21,25 +21,39 @@ export default function App() {
 
   // Unity에서 토큰을 수신하여 로컬 스토리지에 저장
   useEffect(() => {
-    window.receiveTokenFromUnity = function (tokenObj) { 
-      console.log('Unity에서 받은 토큰:', tokenObj);
-      
-      if (typeof tokenObj === 'string') {
-        try {
-          tokenObj = JSON.parse(tokenObj);
-        } catch {
-          console.error('토큰 파싱 오류:', tokenObj);
-          return;
-        }
-      }
-      if (tokenObj.access_token) localStorage.setItem('jwtToken', tokenObj.access_token);
-      if (tokenObj.refresh_token) localStorage.setItem('jwtRefreshToken', tokenObj.refresh_token);
+  window.receiveTokenFromUnity = function(accessToken) {
+    if (typeof accessToken === 'string') {
+      localStorage.setItem('jwtToken', accessToken);
+      console.log('access_token 저장:', accessToken);
+    } else {
+      localStorage.removeItem('jwtToken');
+      console.error('access_token이 문자열이 아닙니다:', accessToken);
+    }
+  };
 
-      // 디버깅용
-      console.log('access_token 저장:', tokenObj.access_token);
-      console.log('refresh_token 저장:', tokenObj.refresh_token);
-    };
-  }, []);
+  return () => { window.receiveTokenFromUnity = null; };
+}, []);
+
+  // useEffect(() => {
+  //   window.receiveTokenFromUnity = function (tokenObj) { 
+  //     console.log('Unity에서 받은 토큰:', tokenObj);
+
+  //     if (typeof tokenObj === 'string') {
+  //       try {
+  //         tokenObj = JSON.parse(tokenObj);
+  //       } catch {
+  //         console.error('토큰 파싱 오류:', tokenObj);
+  //         return;
+  //       }
+  //     }
+  //     if (tokenObj.access_token) localStorage.setItem('jwtToken', tokenObj.access_token);
+  //     if (tokenObj.refresh_token) localStorage.setItem('jwtRefreshToken', tokenObj.refresh_token);
+
+  //     // 디버깅용
+  //     console.log('access_token 저장:', tokenObj.access_token);
+  //     console.log('refresh_token 저장:', tokenObj.refresh_token);
+  //   };
+  // }, []);
 
   // Unity에서 위치 업데이트 메시지를 수신하여 마커 위치를 업데이트
   useEffect(() => {
