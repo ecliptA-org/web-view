@@ -11,8 +11,12 @@ export default function App() {
   const [currentMarkerPos, setCurrentMarkerPos] = useState(DEFAULT_CENTER); // currentAddMarker 위치
   const [showPopup, setShowPopup] = useState(false); // 팝업 표시 상태
 
-  const changeScene = (scene) => {
-    window.Unity?.call(JSON.stringify({ type: 'scene_change', target: scene }));
+  const goToSpace = (scene, spaceId) => {
+    window.Unity?.call(JSON.stringify({
+      type: 'scene_change',
+      target: scene,
+      user_space_id: spaceId
+    }));
   };
 
   // Unity에서 토큰을 수신하여 로컬 스토리지에 저장
@@ -107,13 +111,17 @@ export default function App() {
         return;
       }
 
+      // 서버에서 user_space_id 받기
+      const data = await res.json();
+      const spaceId = data?.user_space_id;
+
       // 상태 초기화
       setShowPopup(false);
       setCurrentMarkerPos(center);
       alert("방탈출이 추가되었습니다");
 
       // 씬 이동 
-      changeScene('SpaceScan');
+      goToSpace('SpaceScan', spaceId);
     } catch (err) {
       alert('서버 오류, 다시 시도해 주세요.');
     }
