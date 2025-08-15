@@ -22,27 +22,45 @@ export default function App() {
 
   // Unity에서 토큰을 수신하여 로컬 스토리지에 저장
   useEffect(() => {
-    window.receiveTokenFromUnity = function (tokenObj) { 
-      console.log('Unity에서 받은 토큰:', tokenObj);
+  // Unity에서 호출하는 함수 등록
+  window.receiveTokenFromUnity = function (tokenObj) {
+    console.log('[React] Unity에서 받은 토큰:', tokenObj);
 
-      alert('Unity에서 받은 토큰:', tokenObj);
-      if (typeof tokenObj === 'string') {
-        try {
-          tokenObj = JSON.parse(tokenObj);
-        } catch {
-          console.error('토큰 파싱 오류:', tokenObj);
-          return;
-        }
+    if (typeof tokenObj === 'string') {
+      try {
+        tokenObj = JSON.parse(tokenObj);
+      } catch {
+        console.error('[React] 토큰 파싱 오류:', tokenObj);
+        return;
       }
-      if (tokenObj.access_token) localStorage.setItem('jwtToken', tokenObj.access_token);
-      if (tokenObj.refresh_token) localStorage.setItem('jwtRefreshToken', tokenObj.refresh_token);
+    }
 
-      // 디버깅용
-      console.log('access_token 저장:', tokenObj.access_token);
-      console.log('refresh_token 저장:', tokenObj.refresh_token);
-      alert('access_token 저장:', tokenObj.access_token);
-    };
-  }, []);
+    if (tokenObj.access_token) {
+      localStorage.setItem('jwtToken', tokenObj.access_token);
+      console.log('[React] access_token 저장:', tokenObj.access_token);
+    }
+    if (tokenObj.refresh_token) {
+      localStorage.setItem('jwtRefreshToken', tokenObj.refresh_token);
+      console.log('[React] refresh_token 저장:', tokenObj.refresh_token);
+    }
+  };
+
+  // React 준비 완료 → Unity에 알림
+  setTimeout(() => {
+    if (window.Unity && typeof window.Unity.call === 'function') {
+      console.log('[React] Unity에 ready_for_token 요청 전송');
+      window.Unity.call("ready_for_token");
+    } else {
+      console.warn('[React] Unity.call이 아직 없음, 1초 뒤 재시도 예정');
+      setTimeout(() => {
+        if (window.Unity && typeof window.Unity.call === 'function') {
+          console.log('[React] 재시도: Unity에 ready_for_token 요청 전송');
+          window.Unity.call("ready_for_token");
+        }
+      }, 1000);
+    }
+  }, 500);
+}, []);
 
   // Unity에서 위치 업데이트 메시지를 수신하여 마커 위치를 업데이트
   useEffect(() => {
