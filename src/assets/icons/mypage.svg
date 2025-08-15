@@ -1,0 +1,13 @@
+<svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="1" y="1" width="43" height="43.0251" rx="21.5" fill="white"/>
+<rect x="1" y="1" width="43" height="43.0251" rx="21.5" fill="url(#paint0_radial_722_81)"/>
+<rect x="1" y="1" width="43" height="43.0251" rx="21.5" fill="#FAFAFA"/>
+<rect x="1" y="1" width="43" height="43.0251" rx="21.5" stroke="#56C9C0" stroke-opacity="0.12" stroke-width="0.8"/>
+<path d="M31.4661 13L29.4661 15M29.4661 15L32.4661 18M29.4661 15L25.9661 18.5M21.8561 22.61C22.3724 23.1195 22.7829 23.726 23.0638 24.3948C23.3448 25.0635 23.4907 25.7813 23.4931 26.5066C23.4956 27.232 23.3545 27.9507 23.078 28.6213C22.8015 29.2919 22.3952 29.9012 21.8822 30.4141C21.3693 30.9271 20.76 31.3334 20.0894 31.6099C19.4188 31.8864 18.7001 32.0275 17.9747 32.025C17.2494 32.0226 16.5316 31.8767 15.8629 31.5958C15.1941 31.3148 14.5876 30.9043 14.0781 30.388C13.0762 29.3507 12.5219 27.9614 12.5344 26.5193C12.5469 25.0772 13.1253 23.6977 14.1451 22.678C15.1648 21.6583 16.5443 21.0798 17.9864 21.0673C19.4285 21.0548 20.8178 21.6091 21.8551 22.611L21.8561 22.61ZM21.8561 22.61L25.9661 18.5M25.9661 18.5L28.9661 21.5" stroke="#2DC497" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<defs>
+<radialGradient id="paint0_radial_722_81" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(44 44.0251) rotate(-143.455) scale(72.2562 56.2507)">
+<stop offset="0.285016" stop-color="#F1FAEE"/>
+<stop offset="1" stop-color="#F1FAEE"/>
+</radialGradient>
+</defs>
+</svg>
